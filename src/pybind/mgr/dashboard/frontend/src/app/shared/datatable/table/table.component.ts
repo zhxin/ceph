@@ -65,6 +65,8 @@ export class TableComponent implements AfterContentChecked, OnInit, OnChanges, O
   mapTpl: TemplateRef<any>;
   @ViewChild('truncateTpl', { static: true })
   truncateTpl: TemplateRef<any>;
+  @ViewChild('timeAgoTpl', { static: true })
+  timeAgoTpl: TemplateRef<any>;
   @ViewChild('rowDetailsTpl', { static: true })
   rowDetailsTpl: TemplateRef<any>;
 
@@ -579,6 +581,7 @@ export class TableComponent implements AfterContentChecked, OnInit, OnChanges, O
     this.cellTemplates.badge = this.badgeTpl;
     this.cellTemplates.map = this.mapTpl;
     this.cellTemplates.truncate = this.truncateTpl;
+    this.cellTemplates.timeAgo = this.timeAgoTpl;
   }
 
   useCustomClass(value: any): string {
