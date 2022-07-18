@@ -24,7 +24,14 @@ function(check_cxx_atomics var)
 // We specifically test access via an otherwise unknown pointer here
 // to ensure we get the most complex case.  If this access can be
 // done without libatomic, then all accesses can be done.
+struct tagged_ptr {
+  int* ptr;
+  std::size_t tag;
+};
+
 bool atomic16(std::atomic<unsigned __int128> *ptr)
+void atomic16(std::atomic<tagged_ptr> *ptr) __attribute__ ((used));
+void atomic16(std::atomic<tagged_ptr> *ptr)
 {
   return *ptr != 0;
 }
