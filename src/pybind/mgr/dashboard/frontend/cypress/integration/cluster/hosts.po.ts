@@ -168,4 +168,16 @@ export class HostsPageHelper extends PageHelper {
     // in different steps
     this.getTableCell(this.columnIndex.hostname, hostname).click();
   }
+
+  checkServiceInstancesExist(hostname: string, instances: string[]) {
+    this.getTableCell(this.columnIndex.hostname, hostname)
+      .parent()
+      .find(`datatable-body-cell:nth-child(${this.columnIndex.services}) .badge`)
+      .should(($ele) => {
+        const serviceInstances = $ele.toArray().map((v) => v.innerText);
+        for (const instance of instances) {
+          expect(serviceInstances).to.include(instance);
+        }
+      });
+  }
 }
