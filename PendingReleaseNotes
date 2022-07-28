@@ -47,6 +47,15 @@
   configurable. This has the same defaults as debug_rgw, but can now be controlled
   independently.
 
+>=17.2.3
+
+* A cephsqlite bug that caused the mgr to crash repeatedly and die is now
+fixed. The bug was exposed due to 17.2.2 using gcc 8.5.0-14, which contains
+a new patch to check for invalid regex. 17.2.1 was using gcc 8.5.0-13, which
+does not contain the invalid regex patch.
+Relevant tracker: https://tracker.ceph.com/issues/55304
+Relevant BZ: https://bugzilla.redhat.com/show_bug.cgi?id=2110797
+
 >=17.2.1
 
 * The "BlueStore zero block detection" feature (first introduced to Quincy in
