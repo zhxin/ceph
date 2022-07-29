@@ -133,6 +133,7 @@ def run_scheduler_test(results, mk_spec, hosts, daemons, key_elems):
                 spec=spec,
                 hosts=hosts,
                 unreachable_hosts=[],
+                draining_hosts=[],
                 daemons=daemons,
             ).place()
             if isinstance(host_res, list):
@@ -149,6 +150,7 @@ def run_scheduler_test(results, mk_spec, hosts, daemons, key_elems):
                 spec=spec,
                 hosts=hosts,
                 unreachable_hosts=[],
+                draining_hosts=[],
                 daemons=daemons
             ).place()
 
@@ -841,6 +843,7 @@ def test_node_assignment(service_type, placement, hosts, daemons, rank_map, post
         spec=spec,
         hosts=[HostSpec(h, labels=['foo']) for h in hosts],
         unreachable_hosts=[],
+        draining_hosts=[],
         daemons=daemons,
         allow_colo=allow_colo,
         rank_map=rank_map,
@@ -947,6 +950,7 @@ def test_node_assignment2(service_type, placement, hosts,
         spec=ServiceSpec(service_type, placement=placement),
         hosts=[HostSpec(h, labels=['foo']) for h in hosts],
         unreachable_hosts=[],
+        draining_hosts=[],
         daemons=daemons,
     ).place()
     assert len(hosts) == expected_len
@@ -981,6 +985,7 @@ def test_node_assignment3(service_type, placement, hosts,
         spec=ServiceSpec(service_type, placement=placement),
         hosts=[HostSpec(h) for h in hosts],
         unreachable_hosts=[],
+        draining_hosts=[],
         daemons=daemons,
     ).place()
     assert len(hosts) == expected_len
@@ -1078,6 +1083,7 @@ def test_node_assignment4(spec, networks, daemons,
         spec=spec,
         hosts=[HostSpec(h, labels=['foo']) for h in networks.keys()],
         unreachable_hosts=[],
+        draining_hosts=[],
         daemons=daemons,
         allow_colo=True,
         networks=networks,
@@ -1164,6 +1170,7 @@ def test_bad_specs(service_type, placement, hosts, daemons, expected):
             spec=ServiceSpec(service_type, placement=placement),
             hosts=[HostSpec(h) for h in hosts],
             unreachable_hosts=[],
+            draining_hosts=[],
             daemons=daemons,
         ).place()
     assert str(e.value) == expected
@@ -1340,6 +1347,7 @@ def test_active_assignment(service_type, placement, hosts, daemons, expected, ex
         spec=spec,
         hosts=[HostSpec(h) for h in hosts],
         unreachable_hosts=[],
+        draining_hosts=[],
         daemons=daemons,
     ).place()
     assert sorted([h.hostname for h in hosts]) in expected
@@ -1437,6 +1445,7 @@ def test_unreachable_host(service_type, placement, hosts, unreachable_hosts, dae
         spec=spec,
         hosts=[HostSpec(h) for h in hosts],
         unreachable_hosts=[HostSpec(h) for h in unreachable_hosts],
+        draining_hosts=[],
         daemons=daemons,
     ).place()
     assert sorted([h.hostname for h in to_add]) in expected_add
@@ -1513,6 +1522,7 @@ def test_remove_from_offline(service_type, placement, hosts, maintenance_hosts, 
         spec=spec,
         hosts=host_specs,
         unreachable_hosts=[h for h in host_specs if h.status],
+        draining_hosts=[],
         daemons=daemons,
     ).place()
     assert sorted([h.hostname for h in to_add]) in expected_add
