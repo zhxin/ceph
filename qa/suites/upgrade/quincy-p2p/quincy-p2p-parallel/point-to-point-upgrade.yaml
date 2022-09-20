@@ -93,7 +93,7 @@ tasks:
     mon.b:
       tag: v17.2.3
 - parallel:
-   - workload_quincy
+   - workload_quincy_point
    - upgrade-sequence_quincy
 - print: "**** done parallel quincy v17.2.3"
 
@@ -102,7 +102,7 @@ tasks:
     mon.a:
     mon.b:
 - parallel:
-   - workload_quincy
+   - workload_quincy_latest
    - upgrade-sequence_quincy
 - print: "**** done parallel quincy branch"
 
@@ -113,7 +113,34 @@ workload:
        clients:
          client.0:
            - suites/blogbench.sh
-workload_quincy:
+
+workload_quincy_point:
+   full_sequential:
+   - workunit:
+       branch: quincy
+       tag: v17.2.3
+       clients:
+         client.1:
+         - rados/test.sh
+         - cls
+       env:
+         CLS_RBD_GTEST_FILTER: '*:-TestClsRbd.snapshots_namespaces'
+   - print: "**** done rados/test.sh &  cls workload_quincy_point"
+   - sequential:
+     - rgw: [client.0]
+     - print: "**** done rgw workload_quincy_point"
+     - s3tests:
+         client.0:
+           force-branch: ceph-quincy
+           rgw_server: client.0
+           scan_for_encryption_keys: false
+     - print: "**** done s3tests workload_quincy_point"
+     - rbd_fsx:
+         clients: [client.0]
+         size: 134217728
+     - print: "**** done rbd_fsx workload_quincy_point"
+
+workload_quincy_latest:
    full_sequential:
    - workunit:
        branch: quincy
@@ -124,20 +151,20 @@ workload_quincy:
          - cls
        env:
          CLS_RBD_GTEST_FILTER: '*:-TestClsRbd.snapshots_namespaces'
-   - print: "**** done rados/test.sh &  cls workload_quincy"
+   - print: "**** done rados/test.sh &  cls workload_quincy_latest"
    - sequential:
      - rgw: [client.0]
-     - print: "**** done rgw workload_quincy"
+     - print: "**** done rgw workload_quincy_latest"
      - s3tests:
          client.0:
            force-branch: ceph-quincy
            rgw_server: client.0
            scan_for_encryption_keys: false
-     - print: "**** done s3tests workload_quincy"
+     - print: "**** done s3tests workload_quincy_latest"
      - rbd_fsx:
          clients: [client.0]
          size: 134217728
-     - print: "**** done rbd_fsx workload_quincy"
+     - print: "**** done rbd_fsx workload_quincy_latest"
 
 upgrade-sequence_quincy:
    sequential:
